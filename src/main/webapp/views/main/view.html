@@ -1,0 +1,252 @@
+<div class="row">
+	<div class="col-xs-7">
+		<div class="pull-left">
+			<a href="http://www.ebcu.org/" target="_blank"><img alt="logo" src="images/logo.png" class="img-rounded" style="margin: 5px 10px 5px 2px" width="100" height="100" /></a>
+		</div>
+		<div class="pull-left center-block">
+			<h2>EBCU Beer-o-meter</h2>
+			<h4>{{'Generic.Header.Election 2014' | translate}}</h4>
+		</div>
+	</div>
+	<div class="col-xs-5">
+		<div class="pull-right" style="margin: 20px 0 0 10px">
+			<button type="button" class="btn btn-danger" ng-click="showHelp()">{{'Generic.Button.Help' | translate}}</button>
+		</div>
+		<div class="pull-right" style="margin: 20px 0 0 10px">
+			<button type="button" class="btn btn-info" ng-click="changeLanguage()">{{'Generic.Button.Change language' | translate}}</button>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">{{ 'Generic.Header.Your opinion' | translate }}</div>
+				<div class="panel-body">
+				<div ng-repeat="question in questions">
+					<p><strong>{{question.subject | translate }}</strong></p>
+					
+					<div class="row">
+						<div class="col-xs-7 text-left">{{ 'Generic.Field.Fully disagree' | translate }}</div>
+						<div class="col-xs-5 text-left">{{ 'Generic.Field.Fully agree' | translate }}</div>                                 
+					</div>
+					<div class="row">
+						<div class="col-xs-1"></div>
+						<div class="col-xs-1">
+							<label>
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="0" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">-3</div>
+							</label>
+						</div>
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="17" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">-2</div>
+							</label>
+						</div>
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="34" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">-1</div>
+							</label>
+						</div>  
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="50" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">0</div>
+							</label>
+						</div>  
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="66" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">+1</div>
+							</label>
+						</div>
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">
+									<input type="radio" ng-model="question.point" value="83" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">+2</div>
+							</label>
+						</div>
+						<div class="col-xs-1">
+							<label> 
+								<div class="text-center">       
+									<input type="radio" ng-model="question.point" value="100" ng-change="loadPartiesAndCandidates()" />
+								</div>
+								<div class="text-center">+3</div>
+							</label>
+						</div>
+						<div class="col-xs-1"></div>
+					</div>              
+				<hr />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel panel-info">
+			<div class="panel-heading">{{ 'Generic.Header.Their opinion' | translate }}</div>
+			<div class="panel-body">
+				<form name="FilterForm" role="form">
+					<div class="form-group">
+						<label for="FilterForm.CountryId">{{ 'Generic.Field.Country' | translate }}</label>
+						<select class="form-control" ng-model="FilterForm.CountryId" name="FilterForm.CountryId" id="FilterForm.CountryId" ng-options="country.id as country.name | translate for country in FilterForm.countries | orderBy:'name'" ng-change="filterDistricts();">
+							<option value="">{{ 'Generic.Field.All' | translate }}</option>				
+						</select>
+					</div>		
+					<div class="form-group" ng-show="FilterForm.CountryId && FilterForm.districts.length && (viewBy == viewOptions[0])">
+						<label for="FilterForm.DistrictId">{{ 'Generic.Field.District' | translate }}</label>
+						<select class="form-control" ng-model="FilterForm.DistrictId" name="FilterForm.DistrictId" id="FilterForm.DistrictId" ng-options="district.id as district.name | translate for district in FilterForm.districts | orderBy:'name'" ng-change="loadPartiesAndCandidates();">					
+						<option value="">{{ 'Generic.Field.All' | translate }}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="viewBy">{{ 'Generic.Field.View by' | translate }}</label>
+						<select class="form-control" ng-model="viewBy" name="viewBy" id="viewBy" ng-options="viewOption.value | translate for viewOption in viewOptions" ng-change="loadPartiesAndCandidates();">
+						</select>
+					</div>			
+				</form>
+
+				<hr />	
+				
+				<div ng-show="viewBy == viewOptions[0]">
+					<div ng-repeat="candidate in candidates" class="row add-hover" ng-click="showCandidateInfo(candidate.id)">
+						<div class="col-md-9">
+							<h4>{{candidate.title}} {{candidate.firstName}} {{candidate.lastName}}</h4>
+							<h5>{{candidate.party | translate}}, <span ng-show="!FilterForm.DistrictId && candidate.district">{{candidate.district | translate }}, </span>{{candidate.country | translate}}</h5>			
+							
+						</div>
+						<div class="col-md-3 text-right">
+							<h4>{{candidate.score}}%</h4>
+						</div>					
+					</div>		
+				</div>
+				
+				<div ng-show="viewBy == viewOptions[1]">
+					<div ng-repeat="party in parties" class="row add-hover" ng-click="showPartyInfo(party.id)">
+						<div class="col-md-9">
+							<h4>{{party.name | translate}}</h4>
+							<h5>{{party.country | translate}}</h5>			
+							
+						</div>
+						<div class="col-md-3 text-right">
+							<h4>{{party.score}}%</h4>
+						</div>					
+					</div>		
+				</div>				
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel panel-success">
+			<div class="panel-heading">{{ 'Generic.Header.Their opinion in detail' | translate }}</div>
+			<div class="panel-body">
+				<div class="text-center" ng-if="!candidate">
+					<span class="glyphicon glyphicon-info-sign" style="font-size: 15em; color: #eee; margin-top: 30px"></span>
+				</div>			
+				<div ng-if="candidate">
+					<h4>{{candidate.title}} {{candidate.firstName}} {{candidate.lastName}}</h4>
+					<h5>{{candidate.party | translate}}, <span ng-show="candidate.district">{{candidate.district | translate }}, </span>{{candidate.country | translate}}</h5>
+					<h5 ng-if="candidate.number">{{'Generic.Field.Number' | translate }}: <strong>{{candidate.number}}</strong></h5>
+					<div class="row">
+						<div class="col-xs-4" ng-if="candidate.homepage">
+							<a href="{{candidate.homepage}}" target="_blank">{{'Generic.Field.Home page' | translate}}</a>
+						</div>
+						<div class="col-xs-4" ng-if="candidate.facebook">
+							<a href="{{candidate.facebook}}" target="_blank">Facebook</a>
+						</div>
+						<div class="col-xs-4" ng-if="candidate.twitter">
+							<a href="{{candidate.twitter}}" target="_blank">Twitter</a>
+						</div>											
+					</div>					
+					<hr ng-if="candidate.description" />
+					<div ng-if="candidate.description" ng-bind-html="candidate.description | nl2br"></div>
+					
+					<div ng-repeat="question in questions">
+						<hr />					
+						<p><strong>{{question.subject | translate }}</strong></p>
+						
+						<div class="row">
+							<div class="col-xs-7 text-left">{{ 'Generic.Field.Fully disagree' | translate }}</div>
+							<div class="col-xs-5 text-left">{{ 'Generic.Field.Fully agree' | translate }}</div>                                 
+						</div>
+						<div class="row">
+							<div class="col-xs-1"></div>
+							<div class="col-xs-1">
+								<label>
+									<div class="text-center">
+										<input type="radio" value="0" disabled="disabled" ng-checked="candidate.answers[$index].point == 0"	/>
+									</div>
+									<div class="text-center">-3</div>
+								</label>
+							</div>
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">
+										<input type="radio" value="17" disabled="disabled" ng-checked="candidate.answers[$index].point == 17" />
+									</div>
+									<div class="text-center">-2</div>
+								</label>
+							</div>
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">
+										<input type="radio" value="34" disabled="disabled" ng-checked="candidate.answers[$index].point == 34" />
+									</div>
+									<div class="text-center">-1</div>
+								</label>
+							</div>  
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">
+										<input type="radio" value="50" disabled="disabled" ng-checked="candidate.answers[$index].point == 50" />
+									</div>
+									<div class="text-center">0</div>
+								</label>
+							</div>  
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">
+										<input type="radio" value="66" disabled="disabled" ng-checked="candidate.answers[$index].point == 66" />
+									</div>
+									<div class="text-center">+1</div>
+								</label>
+							</div>
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">
+										<input type="radio" value="83" disabled="disabled" ng-checked="candidate.answers[$index].point == 83" />
+									</div>
+									<div class="text-center">+2</div>
+								</label>
+							</div>
+							<div class="col-xs-1">
+								<label> 
+									<div class="text-center">       
+										<input type="radio" value="100" disabled="disabled" ng-checked="candidate.answers[$index].point == 100" />
+									</div>
+									<div class="text-center">+3</div>
+								</label>
+							</div>
+							<div class="col-xs-1"></div>
+						</div> 
+						<div ng-if="candidate.answers[$index].comment">
+							<blockquote><p class="small" ng-bind-html="candidate.answers[$index].comment | nl2br"></p></blockquote>
+						</div>
+					</div>										
+				</div>
+			</div>
+		</div>  
+	</div>  
+</div>

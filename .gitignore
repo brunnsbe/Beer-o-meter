@@ -1,0 +1,6 @@
+src/main/resources/db.properties
+.settings
+.project
+.classpath
+deploy.bat
+target
