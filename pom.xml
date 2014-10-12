@@ -29,6 +29,12 @@
 
 	<dependencies>
 		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>provided</scope> 
+		</dependency>	
+		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 			<version>3.0.8.Final</version>
@@ -62,7 +68,7 @@
         <dependency>
             <groupId>org.sql2o</groupId>
             <artifactId>sql2o</artifactId>
-            <version>1.5.1</version>
+            <version>1.5.2</version>
         </dependency>
 		<dependency>
 		    <groupId>commons-configuration</groupId>
